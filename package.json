@@ -1,7 +1,7 @@
 {
   "name": "test-inject",
   "version": "0.0.1",
-  "description": "",
+  "description": "Automatic dependency injection for test cases",
   "keywords": [],
   "homepage": "https://github.com/vinsonchuong/test-inject",
   "bugs": "https://github.com/vinsonchuong/test-inject/issues",
@@ -25,7 +25,6 @@
     "test": "eslint && jasmine"
   },
   "dependencies": {
-    "node-promise-es6": "^0.3.2"
   },
   "devDependencies": {
     "dist-es6": "^0.2.3",
