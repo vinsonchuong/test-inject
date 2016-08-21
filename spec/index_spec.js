@@ -6,7 +6,7 @@ describe('test-inject', () => {
     const barSpy = jasmine.createSpy('bar');
     const testSpy = jasmine.createSpy('test');
 
-    const inject = register({
+    const {inject} = register({
       foo: {
         setUp: () => fooSpy,
         tearDown: (foo) => foo()
