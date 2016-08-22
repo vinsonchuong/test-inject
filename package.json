@@ -14,7 +14,6 @@
   ],
   "main": "src/index.js",
   "bin": {
-    "test-inject": "src/bin/test-inject.js"
   },
   "repository": {
     "type": "git",
