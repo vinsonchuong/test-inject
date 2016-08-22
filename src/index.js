@@ -1,44 +1,29 @@
-function parameters(fn) {
-  const [, names] = fn.toString().match(/^.*?\((.*?)\)/);
-  return names.split(/\s*,\s*/).filter(Boolean);
-}
-
-class DependencyTracker {
-  constructor(dependencies) {
-    this.dependencies = dependencies;
+class Dependencies {
+  constructor(manifest) {
     this.tearDowns = [];
-  }
-
-  setUp(...dependencyNames) {
-    const setUpDependencies = [];
-    for (const dependencyName of dependencyNames) {
-      const {setUp, tearDown} = this.dependencies[dependencyName];
-      const dependency = setUp();
-      this.tearDowns.push(() => tearDown(dependency));
-      setUpDependencies.push(dependency);
+    for (const [name, {setUp, tearDown}] of Object.entries(manifest)) {
+      Reflect.defineProperty(this, name, {
+        get() {
+          const dependency = setUp();
+          this.tearDowns.push(() => tearDown(dependency));
+          return dependency;
+        }
+      });
     }
-    return setUpDependencies;
   }
 
-  tearDownAll() {
+  tearDown() {
     for (const tearDown of this.tearDowns) {
       tearDown();
     }
-    this.tearDowns = [];
   }
 }
 
-export default function(dependencies) {
-  const tracker = new DependencyTracker(dependencies);
-  return {
-    inject(test) {
-      return () => {
-        try {
-          test(...tracker.setUp(...parameters(test)));
-        } finally {
-          tracker.tearDownAll();
-        }
-      };
-    }
-  };
-}
+export default (manifest) => (test) => (...args) => {
+  const dependencies = new Dependencies(manifest);
+  try {
+    test(...args, dependencies);
+  } finally {
+    dependencies.tearDown();
+  }
+};

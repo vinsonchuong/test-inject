@@ -13,18 +13,26 @@ import test from 'ava';
 import inject from 'test-inject';
 import Directory from 'directory-helpers';
 
-const inject = register({
+const {inject} = register({
   src: {
-    setUp: () => new Directory('src'),
-    tearDown: async (src) => await src.remove()
+    setUp() {
+      return new Directory('src');
+    },
+    async tearDown(src) {
+      await src.remove();
+    }
   },
   spec: {
-    setUp: () => new Directory('spec'),
-    tearDown: async (spec) => await spec.remove()
+    setUp() {
+      new Directory('spec');
+    },
+    async tearDown(spec) {
+      await spec.remove();
+    }
   }
 });
 
-test('it works', inject(async (src) => {
+test('it works', inject((t, {src}) => {
   await src.write({'index.js', "console.log('Hello World!')"});
   test.is(await src.read('index.js'), "console.log('Hello World!')");
 }))
