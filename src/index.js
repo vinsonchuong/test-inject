@@ -5,25 +5,25 @@ class Dependencies {
       Reflect.defineProperty(this, name, {
         get() {
           const dependency = setUp();
-          this.tearDowns.push(() => tearDown(dependency));
+          this.tearDowns.push(async () => tearDown(await dependency));
           return dependency;
         }
       });
     }
   }
 
-  tearDown() {
+  async tearDown() {
     for (const tearDown of this.tearDowns) {
-      tearDown();
+      await tearDown();
     }
   }
 }
 
-export default (manifest) => (test) => (...args) => {
+export default (manifest) => (test) => async (...args) => {
   const dependencies = new Dependencies(manifest);
   try {
     test(...args, dependencies);
   } finally {
-    dependencies.tearDown();
+    await dependencies.tearDown();
   }
 };

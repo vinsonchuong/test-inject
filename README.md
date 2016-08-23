@@ -38,6 +38,10 @@ test('it works', inject((t, {src}) => {
 }))
 ```
 
+`setUp` is called only for the requested dependencies, their return values
+being injected into the test. Note that if `setUp` is `async` or returns a
+`Promise`, the test will have to `await` its resolution.
+
 ## Development
 ### Getting Started
 The application requires the following external dependencies:

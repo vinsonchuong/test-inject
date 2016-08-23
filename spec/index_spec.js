@@ -1,7 +1,7 @@
 import register from 'test-inject';
 
 describe('test-inject', () => {
-  it('can inject dependencies', () => {
+  it('can inject async dependencies', async () => {
     const fooSpy = jasmine.createSpy('foo');
     const barSpy = jasmine.createSpy('bar');
     const testSpy = jasmine.createSpy('test');
@@ -9,10 +9,10 @@ describe('test-inject', () => {
     const inject = register({
       foo: {
         setUp() {
-          return fooSpy;
+          return Promise.resolve(fooSpy);
         },
         tearDown(foo) {
-          foo();
+          Promise.resolve().then(foo);
         }
       },
       bar: {
@@ -25,15 +25,15 @@ describe('test-inject', () => {
       }
     });
 
-    const wrappedTest = inject((arg, {foo, bar}) => {
-      testSpy(arg, foo, bar);
+    const wrappedTest = inject(async (arg, {foo, bar}) => {
+      testSpy(arg, await foo, bar);
     });
 
     expect(fooSpy).not.toHaveBeenCalled();
     expect(barSpy).not.toHaveBeenCalled();
     expect(testSpy).not.toHaveBeenCalled();
 
-    wrappedTest(42);
+    await wrappedTest(42);
 
     expect(fooSpy).toHaveBeenCalled();
     expect(barSpy).toHaveBeenCalled();
