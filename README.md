@@ -13,7 +13,7 @@ import test from 'ava';
 import register from 'test-inject';
 import Directory from 'directory-helpers';
 
-const {inject} = register({
+const inject = register({
   src: {
     setUp() {
       return new Directory('src');
