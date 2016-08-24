@@ -26,6 +26,7 @@ describe('test-inject', () => {
     });
 
     const wrappedTest = inject(async (arg, {foo, bar}) => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
       testSpy(arg, await foo, bar);
     });
 

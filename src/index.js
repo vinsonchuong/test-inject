@@ -22,7 +22,7 @@ class Dependencies {
 export default (manifest) => (test) => async (...args) => {
   const dependencies = new Dependencies(manifest);
   try {
-    test(...args, dependencies);
+    await test(...args, dependencies);
   } finally {
     await dependencies.tearDown();
   }
