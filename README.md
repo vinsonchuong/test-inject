@@ -10,7 +10,7 @@ Automatic dependency injection for test cases.
 ## Usage
 ```js
 import test from 'ava';
-import inject from 'test-inject';
+import register from 'test-inject';
 import Directory from 'directory-helpers';
 
 const {inject} = register({
