@@ -1,6 +1,6 @@
 {
   "name": "test-inject",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Automatic dependency injection for test cases",
   "keywords": [],
   "homepage": "https://github.com/vinsonchuong/test-inject",
