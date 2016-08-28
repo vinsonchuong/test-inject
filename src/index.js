@@ -1,11 +1,11 @@
 class Dependencies {
   constructor(manifest) {
     this.tearDowns = [];
-    for (const [name, {setUp, tearDown}] of Object.entries(manifest)) {
+    for (const [name, builder] of Object.entries(manifest)) {
       Reflect.defineProperty(this, name, {
         get() {
-          const dependency = setUp();
-          this.tearDowns.push(async () => tearDown(await dependency));
+          const dependency = builder.setUp();
+          this.tearDowns.push(async () => builder.tearDown(await dependency));
           return dependency;
         }
       });

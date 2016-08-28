@@ -17,10 +17,11 @@ describe('test-inject', () => {
       },
       bar: {
         setUp() {
+          this.value = 1;
           return barSpy;
         },
         tearDown(bar) {
-          bar();
+          bar(this.value);
         }
       }
     });
@@ -37,7 +38,7 @@ describe('test-inject', () => {
     await wrappedTest(42);
 
     expect(fooSpy).toHaveBeenCalled();
-    expect(barSpy).toHaveBeenCalled();
+    expect(barSpy).toHaveBeenCalledWith(1);
     expect(testSpy).toHaveBeenCalledWith(42, fooSpy, barSpy);
   });
 });
